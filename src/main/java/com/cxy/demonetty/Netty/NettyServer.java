@@ -11,6 +11,9 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.GenericFutureListener;
 
 public class NettyServer {
+
+
+
     public static void main(String args[]){
         ServerBootstrap serverBootstrap = new ServerBootstrap();
 
@@ -30,10 +33,12 @@ public class NettyServer {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
                         ch.pipeline().addLast(new StringDecoder());
+                        //SimpleChannelInboundHandler的泛型参数表示只接收这种类型的数据,msg的release()包含在模板方法中了，不需要
                         ch.pipeline().addLast(new SimpleChannelInboundHandler<String>() {
+                            //telnet localhost [port]  进行验证
                             @Override
                             protected void channelRead0(ChannelHandlerContext ctx, String msg) {
-                                System.out.println(msg);
+                                System.out.println("server打印:"+msg);
                             }
                         });
                     }
