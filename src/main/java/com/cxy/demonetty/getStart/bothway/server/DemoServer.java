@@ -1,5 +1,4 @@
-package com.cxy.demonetty.getStart.RWPOJO;
-
+package com.cxy.demonetty.getStart.bothway.server;
 
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -12,10 +11,10 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 
-public class MyTimeServer {
+public class DemoServer {
     private int port;
 
-    public MyTimeServer(int port) {
+    public DemoServer(int port) {
         this.port = port;
     }
 
@@ -34,7 +33,7 @@ public class MyTimeServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             //encoder在handler之前
-                            ch.pipeline().addLast(new MyTimeEncoder(),new MyTimeServerHandler());
+                            ch.pipeline().addLast(new DemoServerHandler());
                         }
                     })
                     //系统用于临时存放已完成三次握手的请求的队列的最大长度
@@ -60,6 +59,6 @@ public class MyTimeServer {
         if (args.length > 0) {
             port = Integer.parseInt(args[0]);
         }
-        new MyTimeServer(port).start();
+        new DemoServer(port).start();
     }
 }
