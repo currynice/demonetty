@@ -17,6 +17,7 @@ public abstract class Packet implements Serializable {
 
     /**
      * 返回指令对本包和所有子类可见,子类必须重写
+     * 方法名不以get开头了,不然会报UnrecognizedPropertyException错误
      */
-    protected abstract Byte getCommand();
+    protected abstract Byte packetCommand();
 }

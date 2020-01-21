@@ -2,11 +2,10 @@ package com.cxy.demonetty.procotol.packet;
 
 import com.cxy.demonetty.procotol.serializer.IMSerializer;
 import com.cxy.demonetty.procotol.serializer.JSONSerializer;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +64,7 @@ public class PacketCodeC {
         //序列化算法标识
         byteBuf.writeByte(jsonSerializer.getSerializerAlogrithm());
         //指令
-        byteBuf.writeByte(packet.getCommand());
+        byteBuf.writeByte(packet.packetCommand());
         //数据长度 todo 长度限制
         byteBuf.writeInt(bytes.length);
         //数据

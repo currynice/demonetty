@@ -33,7 +33,7 @@ public class LoginRequestPacket extends Packet implements Serializable {
      * @return
      */
     @Override
-    public Byte getCommand() {
+    public Byte packetCommand() {
 
         return LOGIN_REQUEST;
     }

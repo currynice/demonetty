@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-public class Test1 {
+public class TestPacketCodeC {
 
     @Test
     public void testCodeC() throws JsonProcessingException {
@@ -26,7 +26,7 @@ public class Test1 {
 
         loginRequestPacket.setUserId(UUID.randomUUID().toString());
 
-        loginRequestPacket.setUsername("zhangsan");
+        loginRequestPacket.setUsername("cxy");
 
         loginRequestPacket.setPassword("password");
 
