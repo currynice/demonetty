@@ -2,7 +2,7 @@ package com.cxy.demonetty.IM.client;
 
 import com.cxy.demonetty.procotol.packet.MessageRequestPacket;
 import com.cxy.demonetty.procotol.packet.PacketCodeC;
-//import com.cxy.demonetty.procotol.util.LoginUtil;
+import com.cxy.demonetty.procotol.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
@@ -40,7 +40,7 @@ public class LoginClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
-                        ch.pipeline().addLast(new ClientLoginHandler());
+                        ch.pipeline().addLast(new ClientHandler());
                     }
                 });
 
@@ -61,7 +61,7 @@ public class LoginClient {
         bootstrap.connect(host, port).addListener(future -> {
 
             if (future.isSuccess()) {
-                System.out.println(new Date() + ": 连接成功!");
+                System.out.println(new Date() + ": 连接成功!启动控制台线程……");
 
                 Channel clientChannel = ((ChannelFuture)future).channel();
                 startConsoleThread(clientChannel);
@@ -89,7 +89,7 @@ public class LoginClient {
     private static void startConsoleThread(Channel channel){
         new Thread(()->{
             while (!Thread.interrupted()) {
-//                if (LoginUtil.hasLogin(channel)) {
+                if (LoginUtil.hasLogin(channel)) {
                     System.out.println("输入发送至服务端的消息: ");
                     Scanner sc = new Scanner(System.in);
                     String line = sc.nextLine();
@@ -98,7 +98,7 @@ public class LoginClient {
                     packet.setMessage(line);
                     ByteBuf byteBuf = PacketCodeC.INSTANCE().encode(channel.alloc(), packet);
                     channel.writeAndFlush(byteBuf);
-//                }
+                }
             }
         }).start();
     }

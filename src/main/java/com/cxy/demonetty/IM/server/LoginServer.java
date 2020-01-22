@@ -26,12 +26,13 @@ public class LoginServer {
         serverBootstrap
                 .group(boss,worker)
                 .channel(NioServerSocketChannel .class)
+                .option(ChannelOption.SO_BACKLOG,1024)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new ServerLoginHandler());
+                        ch.pipeline().addLast(new ServerHandler());
                             }
                         });
         bind(serverBootstrap, PORT);

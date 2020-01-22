@@ -9,8 +9,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.cxy.demonetty.procotol.packet.Command.LOGIN_REQUEST;
-import static com.cxy.demonetty.procotol.packet.Command.LOGIN_RESPONSE;
+import static com.cxy.demonetty.procotol.packet.Command.*;
 
 
 public class PacketCodeC {
@@ -37,6 +36,9 @@ public class PacketCodeC {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 
 
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
         serializerMap = new HashMap<>();
 

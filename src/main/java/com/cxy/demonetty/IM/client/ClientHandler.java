@@ -1,7 +1,7 @@
 package com.cxy.demonetty.IM.client;
 
 import com.cxy.demonetty.procotol.packet.*;
-//import com.cxy.demonetty.procotol.util.LoginUtil;
+import com.cxy.demonetty.procotol.util.LoginUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * 客户端登录逻辑
  */
-public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
+public class ClientHandler extends ChannelInboundHandlerAdapter {
     /**
      * 客户端发送登录请求
      * @param ctx
@@ -48,8 +48,8 @@ public class ClientLoginHandler extends ChannelInboundHandlerAdapter {
             LoginResponsePacket loginResponsePacket = (LoginResponsePacket) packet;
 
             if (loginResponsePacket.isSuccess()) {
-//                LoginUtil.markAsLogin(ctx.channel());
                 System.out.println(new Date() + ": 客户端登录成功");
+                LoginUtil.markAsLogin(ctx.channel());
             } else {
                 System.out.println(new Date() + ": 客户端登录失败，原因：" + loginResponsePacket.getReason());
             }

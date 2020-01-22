@@ -7,7 +7,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.Date;
 
-public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
+public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     /**
      * 服务端处理登录请求 todo 处理消息分支改进
@@ -22,6 +22,7 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
 
         // 判断是否是登录请求数据包
         if (packet instanceof LoginRequestPacket) {
+            System.out.println(new Date() + ": 收到来自客户端的登录请求……");
             LoginRequestPacket loginRequestPacket = (LoginRequestPacket) packet;
 
             LoginResponsePacket responsePacket = new LoginResponsePacket();
@@ -29,9 +30,11 @@ public class ServerLoginHandler extends ChannelInboundHandlerAdapter {
             // 登录校验
             if (valid(loginRequestPacket)) {
                 responsePacket.setSuccess(true);
+                System.out.println(new Date() + ": 登录成功!");
             } else {
                 responsePacket.setReason("账号密码校验失败");
                 responsePacket.setSuccess(false);
+                System.out.println(new Date() + ": 登录失败!");
             }
             // 编码
             ByteBuf responseByteBuf = PacketCodeC.INSTANCE().encode(ctx.alloc(), responsePacket);
