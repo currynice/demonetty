@@ -1,6 +1,7 @@
-package com.cxy.demonetty.procotol.packet;
+package com.cxy.demonetty.procotol.packet.request;
 
 
+import com.cxy.demonetty.procotol.packet.Packet;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -21,7 +22,7 @@ public class LoginRequestPacket extends Packet implements Serializable {
     /**
      * 用户名
      */
-    private String username;
+    private String userName;
 
     /**
      * 密码

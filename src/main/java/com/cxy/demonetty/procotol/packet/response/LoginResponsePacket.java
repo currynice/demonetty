@@ -1,6 +1,7 @@
-package com.cxy.demonetty.procotol.packet;
+package com.cxy.demonetty.procotol.packet.response;
 
 
+import com.cxy.demonetty.procotol.packet.Packet;
 import lombok.Data;
 
 
@@ -14,7 +15,9 @@ import static com.cxy.demonetty.procotol.packet.Command.LOGIN_RESPONSE;
 @Data
 public class LoginResponsePacket extends Packet implements Serializable {
 
+    private String userId;
 
+    private String userName;
 
     /**
      * 是否成功
@@ -25,6 +28,9 @@ public class LoginResponsePacket extends Packet implements Serializable {
      * 错误说明
      */
     private String reason;
+
+
+
 
 
     /**

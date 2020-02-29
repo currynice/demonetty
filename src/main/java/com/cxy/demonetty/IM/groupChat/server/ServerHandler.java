@@ -1,6 +1,10 @@
-package com.cxy.demonetty.IM.server;
+package com.cxy.demonetty.IM.groupChat.server;
 
-import com.cxy.demonetty.procotol.packet.*;
+import com.cxy.demonetty.procotol.packet.Packet;
+import com.cxy.demonetty.procotol.packet.request.LoginRequestPacket;
+import com.cxy.demonetty.procotol.packet.request.MessageRequestPacket;
+import com.cxy.demonetty.procotol.packet.response.LoginResponsePacket;
+import com.cxy.demonetty.procotol.packet.response.MessageResponsePacket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -14,6 +18,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
      * @param ctx
      * @param msg
      */
+    @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
         ByteBuf requestByteBuf = (ByteBuf) msg;
 

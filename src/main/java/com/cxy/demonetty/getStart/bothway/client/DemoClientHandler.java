@@ -16,31 +16,35 @@ public class DemoClientHandler extends ChannelInboundHandlerAdapter {
     public void channelActive(ChannelHandlerContext ctx) {
         System.out.println(new Date() + ": client写出数据");
 
-        // 1. 准备数据
-        ByteBuf buf = getByteBuf(ctx);
+        for (int i = 0; i < 1000; i++) {
+            // 1. 准备数据
+            ByteBuf buf = getByteBuf(ctx);
 
-        // 2. 写buf数据
-        ctx.channel().writeAndFlush(buf);
+            // 2. 写buf数据
+            ctx.channel().writeAndFlush(buf);
+        }
     }
 
 
     private ByteBuf getByteBuf(ChannelHandlerContext ctx) {
-        // 1. 获取二进制抽象 ByteBuf
-        ByteBuf buf = ctx.alloc().buffer(6);
+            // 1. 获取二进制抽象 ByteBuf
+            ByteBuf buf = ctx.alloc().buffer();
+            // 2. 准备数据，指定字符串的字符集为 utf-8
+            byte[] bytes = "你好，欢迎关注我的微信公众号!《cxy的博客》".getBytes(Charset.forName("utf-8"));
+            // 3. 填充数据到 ByteBuf
+            return buf.writeBytes(bytes);
 
-        // 2. 准备数据，指定字符串的字符集为 utf-8
-        byte[] bytes = "你好".getBytes(Charset.forName("utf-8"));
-        // 3. 填充数据到 ByteBuf
-        return buf.writeBytes(bytes);
     }
 
-    //client收到server的数据时触发
-    @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        ByteBuf byteBuf = (ByteBuf) msg;
 
-        System.out.println(new Date() + ": from server -> " + byteBuf.toString(Charset.forName("utf-8")));
-    }
+//
+//    //client收到server的数据时触发
+//    @Override
+//    public void channelRead(ChannelHandlerContext ctx, Object msg) {
+//        ByteBuf byteBuf = (ByteBuf) msg;
+//
+//        System.out.println(new Date() + ": from server -> " + byteBuf.toString(Charset.forName("utf-8")));
+//    }
 
 
     @Override

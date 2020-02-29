@@ -1,10 +1,11 @@
-package com.cxy.demonetty.IM.client;
+package com.cxy.demonetty.IM.singleChat.client;
 
-import com.cxy.demonetty.procotol.packet.MessageRequestPacket;
-import com.cxy.demonetty.procotol.packet.PacketCodeC;
-import com.cxy.demonetty.procotol.util.LoginUtil;
+import com.cxy.demonetty.procotol.packet.codec.PacketDecoder;
+import com.cxy.demonetty.procotol.packet.codec.PacketEncoder;
+import com.cxy.demonetty.procotol.packet.request.LoginRequestPacket;
+import com.cxy.demonetty.procotol.packet.request.MessageRequestPacket;
+import com.cxy.demonetty.procotol.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -40,7 +41,10 @@ public class LoginClient {
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
-                        ch.pipeline().addLast(new ClientHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginResponseHandler());
+                        ch.pipeline().addLast(new MessageResponseHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
@@ -87,19 +91,40 @@ public class LoginClient {
 
 
     private static void startConsoleThread(Channel channel){
+        Scanner sc = new Scanner(System.in);
         new Thread(()->{
             while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入发送至服务端的消息: ");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                //没连接的化
+                if (!SessionUtil.hasLogin(channel)) {
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    ByteBuf byteBuf = PacketCodeC.INSTANCE().encode(channel.alloc(), packet);
-                    channel.writeAndFlush(byteBuf);
+                    System.out.print("请登陆: ");
+                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+                    System.out.print("请输入姓名: ");
+                    String username = sc.nextLine();
+                    loginRequestPacket.setUserName(username);
+
+                    //密码使用默认的
+                    System.out.print("密码使用默认的");
+                    loginRequestPacket.setPassword("pwd");
+
+                    // 发送登录数据包
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
+                }else{
+                    //输入消息接收方的 userId，然后输入一个空格，再输入消息的具体内容
+                    String toUserId = sc.next();
+                    String message = sc.next();
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
                 }
             }
         }).start();
+    }
+
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }

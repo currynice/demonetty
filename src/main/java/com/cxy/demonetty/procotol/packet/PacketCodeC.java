@@ -1,10 +1,11 @@
 package com.cxy.demonetty.procotol.packet;
 
+import com.cxy.demonetty.procotol.packet.request.*;
+import com.cxy.demonetty.procotol.packet.response.*;
 import com.cxy.demonetty.procotol.serializer.IMSerializer;
 import com.cxy.demonetty.procotol.serializer.JSONSerializer;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class PacketCodeC {
 
 
 
-    private static final int MAGIC_NUMBER = 0x12345678;
+    public static final int MAGIC_NUMBER = 0x12345678;
 
     private final Map<Byte, Class<? extends Packet>> packetTypeMap;
 
@@ -40,6 +41,23 @@ public class PacketCodeC {
 
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
 
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+
+        packetTypeMap.put(LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+        packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
+
+        packetTypeMap.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+        packetTypeMap.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
+
+        packetTypeMap.put(GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
+        packetTypeMap.put(GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
+
+        packetTypeMap.put(HEARTBEAT_REQUEST, HeartBeatRequestPacket.class);
+        packetTypeMap.put(HEARTBEAT_RESPONSE, HeartBeatResponsePacket.class);
+
         serializerMap = new HashMap<>();
 
         IMSerializer serializer = new JSONSerializer();
@@ -53,6 +71,30 @@ public class PacketCodeC {
     public ByteBuf encode(ByteBufAllocator allocator,Packet packet) {
         // 1. 创建适合IO的ByteBuf 对象(DirectByteBuffer直接内存即堆外内存，不受JVM堆管理)
         ByteBuf byteBuf = allocator.ioBuffer();
+        // 2. 序列化 Java 对象
+        IMSerializer jsonSerializer = IMSerializer.DEFAULT;
+        byte[] bytes = jsonSerializer.serialize(packet);
+
+
+        // 3. 实际编码过程
+        //魔数
+        byteBuf.writeInt(MAGIC_NUMBER);
+        //版本号
+        byteBuf.writeByte(packet.getVersion());
+        //序列化算法标识
+        byteBuf.writeByte(jsonSerializer.getSerializerAlogrithm());
+        //指令
+        byteBuf.writeByte(packet.packetCommand());
+        //数据长度 todo 长度限制
+        byteBuf.writeInt(bytes.length);
+        //数据
+        byteBuf.writeBytes(bytes);
+
+        return byteBuf;
+    }
+
+    public ByteBuf encode(ByteBuf byteBuf,Packet packet) {
+
         // 2. 序列化 Java 对象
         IMSerializer jsonSerializer = IMSerializer.DEFAULT;
         byte[] bytes = jsonSerializer.serialize(packet);

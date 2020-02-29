@@ -1,6 +1,5 @@
 import com.cxy.demonetty.procotol.packet.LoginRequestPacket;
 import com.cxy.demonetty.procotol.packet.Packet;
-import com.cxy.demonetty.procotol.packet.PacketCodeC;
 import com.cxy.demonetty.procotol.serializer.IMSerializer;
 import com.cxy.demonetty.procotol.serializer.JSONSerializer;
 import com.fasterxml.jackson.core.JsonProcessingException;

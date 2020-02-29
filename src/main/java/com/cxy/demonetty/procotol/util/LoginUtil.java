@@ -19,7 +19,7 @@ public class LoginUtil {
     }
 
     /**
-     * 判断是否登录
+     * 判断是否登录(为了不再每个指令前添加重复的判断逻辑，将实现一个登陆认证handler)
      * @param channel
      */
     public static boolean hasLogin(Channel channel){

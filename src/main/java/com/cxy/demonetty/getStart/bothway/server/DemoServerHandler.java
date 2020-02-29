@@ -5,7 +5,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 public class DemoServerHandler extends ChannelInboundHandlerAdapter {
 
@@ -16,22 +15,22 @@ public class DemoServerHandler extends ChannelInboundHandlerAdapter {
 
         System.out.println("from client:"+ hellobuf.toString(StandardCharsets.UTF_8));
 
-        //回复client
-        System.out.println(new Date() + ": server写出数据");
-        ByteBuf out = getByteBuf(ctx);
-        ctx.channel().writeAndFlush(out);
+//        //回复client
+//        System.out.println(new Date() + ": server写出数据");
+//        ByteBuf out = getByteBuf(ctx);
+//        ctx.channel().writeAndFlush(out);
     }
 
 
-    private ByteBuf getByteBuf(ChannelHandlerContext ctx) {
-        byte[] bytes = "你好鸭!".getBytes(StandardCharsets.UTF_8);
-
-        ByteBuf buffer = ctx.alloc().buffer(8);
-
-        buffer.writeBytes(bytes);
-
-        return buffer;
-    }
+//    private ByteBuf getByteBuf(ChannelHandlerContext ctx) {
+//        byte[] bytes = "你好鸭!".getBytes(StandardCharsets.UTF_8);
+//
+//        ByteBuf buffer = ctx.alloc().buffer(8);
+//
+//        buffer.writeBytes(bytes);
+//
+//        return buffer;
+//    }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

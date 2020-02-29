@@ -1,6 +1,11 @@
 package com.cxy.demonetty.getStart.bothway.server;
 
 
+import com.cxy.demonetty.IM.singleChat.server.LoginRequestHandler;
+import com.cxy.demonetty.IM.singleChat.server.MessageRequestHandler;
+import com.cxy.demonetty.api.ChannelHandler.LifeCycleTestHandler;
+import com.cxy.demonetty.procotol.packet.codec.PacketDecoder;
+import com.cxy.demonetty.procotol.packet.codec.PacketEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -33,7 +38,13 @@ public class DemoServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             //encoder在handler之前
-                            ch.pipeline().addLast(new DemoServerHandler());
+                           // ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+//                            ch.pipeline().addLast(new Spliter());
+                            ch.pipeline().addLast(new LifeCycleTestHandler());
+                            ch.pipeline().addLast(new PacketDecoder());
+                            ch.pipeline().addLast(new LoginRequestHandler());
+                            ch.pipeline().addLast(new MessageRequestHandler());
+                            ch.pipeline().addLast(new PacketEncoder());
                         }
                     })
                     //系统用于临时存放已完成三次握手的请求的队列的最大长度

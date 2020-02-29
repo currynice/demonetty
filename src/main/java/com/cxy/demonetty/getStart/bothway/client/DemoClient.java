@@ -1,7 +1,15 @@
 package com.cxy.demonetty.getStart.bothway.client;
 
 
+import com.cxy.demonetty.IM.singleChat.client.LoginResponseHandler;
+import com.cxy.demonetty.IM.singleChat.client.MessageResponseHandler;
+import com.cxy.demonetty.procotol.packet.request.MessageRequestPacket;
+import com.cxy.demonetty.procotol.packet.codec.PacketDecoder;
+import com.cxy.demonetty.procotol.packet.codec.PacketEncoder;
+import com.cxy.demonetty.procotol.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -10,6 +18,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.AttributeKey;
 
 import java.util.Date;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -29,6 +38,7 @@ public class DemoClient {
             bootstrap.connect(host, port).addListener(future -> {
                 if (future.isSuccess()) {
                     System.out.println("连接成功!");
+                    startConsoleThread(((ChannelFuture)future).channel());
                 } else if (retry == 0) {
                     System.err.println("重试次数已用完，放弃连接！");
                 } else {
@@ -65,11 +75,33 @@ public class DemoClient {
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) {
-                            //ch.pipeline()返回当前连接的逻辑处理责任链
-                            ch.pipeline().addLast(new DemoClientHandler());
+//                         ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+//                            ch.pipeline().addLast(new Spliter());
+                         ch.pipeline().addLast(new PacketDecoder());
+                         ch.pipeline().addLast(new LoginResponseHandler());
+                         ch.pipeline().addLast(new MessageResponseHandler());
+                         ch.pipeline().addLast(new PacketEncoder());
                         }
                     });
             tryConnect(bootstrap,"localhost",8000,5);
 
         }
+
+
+    private static void startConsoleThread(Channel channel) {
+        new Thread(() -> {
+            while (!Thread.interrupted()) {
+                if (LoginUtil.hasLogin(channel)) {
+                    System.out.println("输入消息发送至服务端: ");
+                    Scanner sc = new Scanner(System.in);
+                    String line = sc.nextLine();
+
+                    for (int i = 0; i < 1000; i++) {
+                        channel.writeAndFlush(new MessageRequestPacket(line));
+                    }
+                }
+            }
+        }).start();
+    }
+
     }

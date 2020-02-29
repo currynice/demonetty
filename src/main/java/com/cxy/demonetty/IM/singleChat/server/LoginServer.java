@@ -1,5 +1,7 @@
-package com.cxy.demonetty.IM.server;
+package com.cxy.demonetty.IM.singleChat.server;
 
+import com.cxy.demonetty.procotol.packet.codec.PacketDecoder;
+import com.cxy.demonetty.procotol.packet.codec.PacketEncoder;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -32,7 +34,12 @@ public class LoginServer {
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     @Override
                     protected void initChannel(NioSocketChannel ch) {
-                        ch.pipeline().addLast(new ServerHandler());
+                        ch.pipeline().addLast(new PacketDecoder());
+                        ch.pipeline().addLast(new LoginRequestHandler());
+                        //登陆认证handler
+                        ch.pipeline().addLast(new AuthHandler());
+                        ch.pipeline().addLast(new MessageRequestHandler());
+                        ch.pipeline().addLast(new PacketEncoder());
                             }
                         });
         bind(serverBootstrap, PORT);

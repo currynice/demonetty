@@ -25,5 +25,89 @@ public interface Command {
      */
     Byte MESSAGE_RESPONSE = 4;
 
-//    Byte CREATE_GROUP_CHAT_REQUEST = 3;
+    /**
+     * 退出请求
+     */
+    Byte LOGOUT_REQUEST = 5;
+
+    /**
+     * 退出响应
+     */
+    Byte LOGOUT_RESPONSE = 6;
+
+    /**
+     * 创建群聊请求
+     */
+    Byte CREATE_GROUP_REQUEST = 7;
+
+    /**
+     * 创建群聊响应
+     */
+    Byte CREATE_GROUP_RESPONSE = 8;
+
+
+    /**
+     * 加入群聊请求
+     */
+    Byte JOIN_GROUP_REQUEST = 9;
+
+
+
+    /**
+     * 加入群聊响应
+     */
+    Byte JOIN_GROUP_RESPONSE = 10;
+
+
+
+
+    /**
+     * 获取群成员请求
+     */
+    Byte LIST_GROUP_MEMBERS_REQUEST = 11;
+
+
+
+    /**
+     *  获取群成员响应
+     */
+    Byte LIST_GROUP_MEMBERS_RESPONSE = 12;
+
+
+    /**
+     * 退出群请求
+     */
+    Byte QUIT_GROUP_REQUEST = 13;
+
+
+
+    /**
+     *  退出群响应
+     */
+    Byte QUIT_GROUP_RESPONSE = 14;
+
+
+
+    /**
+     * 发送群消息请求
+     */
+    Byte GROUP_MESSAGE_REQUEST = 15;
+
+
+    /**
+     *  群消息响应
+     */
+    Byte GROUP_MESSAGE_RESPONSE = 16;
+
+
+    /**
+     * 发送心跳包请求
+     */
+    Byte HEARTBEAT_REQUEST = 17;
+
+
+    /**
+     *  心跳包响应
+     */
+    Byte HEARTBEAT_RESPONSE = 18;
 }
