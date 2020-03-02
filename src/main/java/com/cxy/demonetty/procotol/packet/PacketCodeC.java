@@ -12,11 +12,17 @@ import java.util.Map;
 
 import static com.cxy.demonetty.procotol.packet.Command.*;
 
-
+/**
+ * Singleton
+ */
 public class PacketCodeC {
 
     private final static PacketCodeC singlePacketCodeC = new PacketCodeC();
 
+    /**
+     * 获取单例static factory method
+     * @return
+     */
     public static PacketCodeC INSTANCE(){
         return singlePacketCodeC;
     }
