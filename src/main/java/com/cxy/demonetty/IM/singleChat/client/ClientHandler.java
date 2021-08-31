@@ -1,6 +1,7 @@
 package com.cxy.demonetty.IM.singleChat.client;
 
 import com.cxy.demonetty.procotol.packet.Packet;
+import com.cxy.demonetty.procotol.packet.PacketCodeC;
 import com.cxy.demonetty.procotol.packet.response.LoginResponsePacket;
 import com.cxy.demonetty.procotol.packet.response.MessageResponsePacket;
 import com.cxy.demonetty.procotol.util.LoginUtil;
